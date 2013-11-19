@@ -52,31 +52,34 @@
       this.ServerText = new System.Windows.Forms.TextBox();
       this.DeviceLabel = new System.Windows.Forms.Label();
       this.button1 = new System.Windows.Forms.Button();
+      this.GetDevicesBtn = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // TestReadLabel
       // 
       this.TestReadLabel.AutoSize = true;
-      this.TestReadLabel.Location = new System.Drawing.Point(186, 133);
+      this.TestReadLabel.Location = new System.Drawing.Point(186, 154);
       this.TestReadLabel.Name = "TestReadLabel";
       this.TestReadLabel.Size = new System.Drawing.Size(57, 13);
       this.TestReadLabel.TabIndex = 60;
       this.TestReadLabel.Text = "Test Read";
+      this.TestReadLabel.Visible = false;
       // 
       // TestReadPropBtn
       // 
-      this.TestReadPropBtn.Location = new System.Drawing.Point(189, 107);
+      this.TestReadPropBtn.Location = new System.Drawing.Point(189, 128);
       this.TestReadPropBtn.Name = "TestReadPropBtn";
       this.TestReadPropBtn.Size = new System.Drawing.Size(102, 23);
       this.TestReadPropBtn.TabIndex = 59;
       this.TestReadPropBtn.Text = "Test Read Prop";
       this.TestReadPropBtn.UseVisualStyleBackColor = true;
+      this.TestReadPropBtn.Visible = false;
       this.TestReadPropBtn.Click += new System.EventHandler(this.TestReadPropBtn_Click);
       // 
       // BroadcastLabel
       // 
       this.BroadcastLabel.AutoSize = true;
-      this.BroadcastLabel.Location = new System.Drawing.Point(9, 30);
+      this.BroadcastLabel.Location = new System.Drawing.Point(9, 35);
       this.BroadcastLabel.Name = "BroadcastLabel";
       this.BroadcastLabel.Size = new System.Drawing.Size(79, 13);
       this.BroadcastLabel.TabIndex = 58;
@@ -180,7 +183,7 @@
       // 
       // GetObjectsBtn
       // 
-      this.GetObjectsBtn.Location = new System.Drawing.Point(189, 51);
+      this.GetObjectsBtn.Location = new System.Drawing.Point(189, 72);
       this.GetObjectsBtn.Name = "GetObjectsBtn";
       this.GetObjectsBtn.Size = new System.Drawing.Size(102, 23);
       this.GetObjectsBtn.TabIndex = 70;
@@ -200,7 +203,7 @@
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(380, 30);
+      this.label1.Location = new System.Drawing.Point(380, 35);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(76, 13);
       this.label1.TabIndex = 72;
@@ -209,11 +212,12 @@
       // ObjectListLabel
       // 
       this.ObjectListLabel.AutoSize = true;
-      this.ObjectListLabel.Location = new System.Drawing.Point(186, 77);
+      this.ObjectListLabel.Location = new System.Drawing.Point(186, 98);
       this.ObjectListLabel.Name = "ObjectListLabel";
       this.ObjectListLabel.Size = new System.Drawing.Size(57, 13);
       this.ObjectListLabel.TabIndex = 73;
       this.ObjectListLabel.Text = "Test Read";
+      this.ObjectListLabel.Visible = false;
       // 
       // ObjectLabel
       // 
@@ -246,7 +250,7 @@
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(12, 6);
+      this.label2.Location = new System.Drawing.Point(9, 5);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(38, 13);
       this.label2.TabIndex = 77;
@@ -256,7 +260,6 @@
       // 
       this.ServerText.Location = new System.Drawing.Point(59, 5);
       this.ServerText.Name = "ServerText";
-      this.ServerText.ReadOnly = true;
       this.ServerText.RightToLeft = System.Windows.Forms.RightToLeft.No;
       this.ServerText.Size = new System.Drawing.Size(108, 20);
       this.ServerText.TabIndex = 78;
@@ -264,7 +267,7 @@
       // DeviceLabel
       // 
       this.DeviceLabel.AutoSize = true;
-      this.DeviceLabel.Location = new System.Drawing.Point(186, 30);
+      this.DeviceLabel.Location = new System.Drawing.Point(186, 51);
       this.DeviceLabel.Name = "DeviceLabel";
       this.DeviceLabel.Size = new System.Drawing.Size(55, 13);
       this.DeviceLabel.TabIndex = 79;
@@ -278,12 +281,24 @@
       this.button1.TabIndex = 80;
       this.button1.Text = "button1";
       this.button1.UseVisualStyleBackColor = true;
+      this.button1.Visible = false;
+      // 
+      // GetDevicesBtn
+      // 
+      this.GetDevicesBtn.Location = new System.Drawing.Point(189, 3);
+      this.GetDevicesBtn.Name = "GetDevicesBtn";
+      this.GetDevicesBtn.Size = new System.Drawing.Size(102, 23);
+      this.GetDevicesBtn.TabIndex = 81;
+      this.GetDevicesBtn.Text = "Get Devices";
+      this.GetDevicesBtn.UseVisualStyleBackColor = true;
+      this.GetDevicesBtn.Click += new System.EventHandler(this.GetDevicesBtn_Click);
       // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(708, 391);
+      this.Controls.Add(this.GetDevicesBtn);
       this.Controls.Add(this.button1);
       this.Controls.Add(this.DeviceLabel);
       this.Controls.Add(this.ServerText);
@@ -342,6 +357,7 @@
     private System.Windows.Forms.TextBox ServerText;
     private System.Windows.Forms.Label DeviceLabel;
     private System.Windows.Forms.Button button1;
+    private System.Windows.Forms.Button GetDevicesBtn;
   }
 }
 

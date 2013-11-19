@@ -26,7 +26,6 @@ namespace BACnetTest
       Self = this;  // Works only if there is only one mainform
 
       string appini = Application.StartupPath + @"\BACnetTest.INI";
-
       if (File.Exists(appini))
       {
         IniFile ini = new IniFile(appini);
@@ -36,28 +35,50 @@ namespace BACnetTest
       //if (server == "") server = "198.168.92.68";
 
       ServerText.Text = server;
-      // Create the BACNet stack, and see who's out there ...
-      stack = new BACnetStack(server);
-      stack.GetDevices(500);
 
-      DeviceList.Items.Clear();
-      foreach (Device dev in BACnetData.Devices)
-      {
-        DeviceList.Items.Add(
-          //dev.VendorID.ToString() + ", " + 
-          dev.Network.ToString() + ", " +
-          dev.Instance.ToString());
-      }
-
+      GetObjectsBtn.Enabled = false;
       ReadPresentValueBtn.Enabled = false;
       TestBinaryOnBtn.Enabled = false;
       TestBinaryOffBtn.Enabled = false;
-
     }
 
     public void SetBroadcastLabel(string s)
     {
       BroadcastLabel.Text = s;
+    }
+
+    private void GetDevicesBtn_Click(object sender, EventArgs e)
+    {
+      // Create the BACnet Stack, and populate the Devices List
+      try
+      {
+        if (ServerText.Text != server)
+        {
+          server = ServerText.Text;
+          string appini = Application.StartupPath + @"\BACnetTest.INI";
+          IniFile ini = new IniFile(appini);
+          ini.IniWriteValue("Network", "Server", server);
+        }
+
+        stack = new BACnetStack(server);
+        stack.GetDevices(500);
+
+        DeviceList.Items.Clear();
+        foreach (Device dev in BACnetData.Devices)
+        {
+          DeviceList.Items.Add(
+            //dev.VendorID.ToString() + ", " + 
+            dev.Network.ToString() + ", " +
+            dev.Instance.ToString());
+        }
+        ServerText.Enabled = false;
+        GetDevicesBtn.Enabled = false;
+        GetObjectsBtn.Enabled = true;
+      }
+      catch
+      {
+        MessageBox.Show("Could not initialize");
+      }
     }
 
     private void TestReadPropBtn_Click(object sender, EventArgs e)
