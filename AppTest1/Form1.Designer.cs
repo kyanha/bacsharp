@@ -28,62 +28,32 @@
     /// </summary>
     private void InitializeComponent()
     {
-      this.TestReadLabel = new System.Windows.Forms.Label();
-      this.TestReadPropBtn = new System.Windows.Forms.Button();
       this.BroadcastLabel = new System.Windows.Forms.Label();
       this.DeviceList = new System.Windows.Forms.ListBox();
       this.TestWriteLabel = new System.Windows.Forms.Label();
       this.TestBinaryOffBtn = new System.Windows.Forms.Button();
       this.TestBinaryOnBtn = new System.Windows.Forms.Button();
-      this.PCIDAddressText = new System.Windows.Forms.TextBox();
-      this.label26 = new System.Windows.Forms.Label();
-      this.SerialNumberText = new System.Windows.Forms.TextBox();
-      this.SerialNumberCaption = new System.Windows.Forms.Label();
-      this.DeviceIDText = new System.Windows.Forms.TextBox();
-      this.label10 = new System.Windows.Forms.Label();
       this.GetObjectsBtn = new System.Windows.Forms.Button();
       this.ObjectList = new System.Windows.Forms.ListBox();
       this.label1 = new System.Windows.Forms.Label();
-      this.ObjectListLabel = new System.Windows.Forms.Label();
       this.ObjectLabel = new System.Windows.Forms.Label();
       this.PresentValueLabel = new System.Windows.Forms.Label();
       this.ReadPresentValueBtn = new System.Windows.Forms.Button();
       this.label2 = new System.Windows.Forms.Label();
       this.ServerText = new System.Windows.Forms.TextBox();
       this.DeviceLabel = new System.Windows.Forms.Label();
-      this.button1 = new System.Windows.Forms.Button();
       this.GetDevicesBtn = new System.Windows.Forms.Button();
+      this.ObjectListLabel = new System.Windows.Forms.Label();
       this.SuspendLayout();
-      // 
-      // TestReadLabel
-      // 
-      this.TestReadLabel.AutoSize = true;
-      this.TestReadLabel.Location = new System.Drawing.Point(186, 154);
-      this.TestReadLabel.Name = "TestReadLabel";
-      this.TestReadLabel.Size = new System.Drawing.Size(57, 13);
-      this.TestReadLabel.TabIndex = 60;
-      this.TestReadLabel.Text = "Test Read";
-      this.TestReadLabel.Visible = false;
-      // 
-      // TestReadPropBtn
-      // 
-      this.TestReadPropBtn.Location = new System.Drawing.Point(189, 128);
-      this.TestReadPropBtn.Name = "TestReadPropBtn";
-      this.TestReadPropBtn.Size = new System.Drawing.Size(102, 23);
-      this.TestReadPropBtn.TabIndex = 59;
-      this.TestReadPropBtn.Text = "Test Read Prop";
-      this.TestReadPropBtn.UseVisualStyleBackColor = true;
-      this.TestReadPropBtn.Visible = false;
-      this.TestReadPropBtn.Click += new System.EventHandler(this.TestReadPropBtn_Click);
       // 
       // BroadcastLabel
       // 
       this.BroadcastLabel.AutoSize = true;
       this.BroadcastLabel.Location = new System.Drawing.Point(9, 35);
       this.BroadcastLabel.Name = "BroadcastLabel";
-      this.BroadcastLabel.Size = new System.Drawing.Size(79, 13);
+      this.BroadcastLabel.Size = new System.Drawing.Size(46, 13);
       this.BroadcastLabel.TabIndex = 58;
-      this.BroadcastLabel.Text = "Devices Found";
+      this.BroadcastLabel.Text = "Devices";
       // 
       // DeviceList
       // 
@@ -123,64 +93,6 @@
       this.TestBinaryOnBtn.UseVisualStyleBackColor = true;
       this.TestBinaryOnBtn.Click += new System.EventHandler(this.TestBinaryOnBtn_Click);
       // 
-      // PCIDAddressText
-      // 
-      this.PCIDAddressText.Location = new System.Drawing.Point(271, 264);
-      this.PCIDAddressText.Name = "PCIDAddressText";
-      this.PCIDAddressText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.PCIDAddressText.Size = new System.Drawing.Size(89, 20);
-      this.PCIDAddressText.TabIndex = 64;
-      this.PCIDAddressText.Visible = false;
-      // 
-      // label26
-      // 
-      this.label26.AutoSize = true;
-      this.label26.Location = new System.Drawing.Point(190, 267);
-      this.label26.Name = "label26";
-      this.label26.Size = new System.Drawing.Size(75, 13);
-      this.label26.TabIndex = 69;
-      this.label26.Text = "PC IP Address";
-      this.label26.Visible = false;
-      // 
-      // SerialNumberText
-      // 
-      this.SerialNumberText.Location = new System.Drawing.Point(271, 332);
-      this.SerialNumberText.Name = "SerialNumberText";
-      this.SerialNumberText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.SerialNumberText.Size = new System.Drawing.Size(76, 20);
-      this.SerialNumberText.TabIndex = 67;
-      this.SerialNumberText.Visible = false;
-      // 
-      // SerialNumberCaption
-      // 
-      this.SerialNumberCaption.AutoSize = true;
-      this.SerialNumberCaption.Location = new System.Drawing.Point(190, 335);
-      this.SerialNumberCaption.Name = "SerialNumberCaption";
-      this.SerialNumberCaption.Size = new System.Drawing.Size(43, 13);
-      this.SerialNumberCaption.TabIndex = 68;
-      this.SerialNumberCaption.Text = "Serial #";
-      this.SerialNumberCaption.Visible = false;
-      // 
-      // DeviceIDText
-      // 
-      this.DeviceIDText.Location = new System.Drawing.Point(271, 298);
-      this.DeviceIDText.Name = "DeviceIDText";
-      this.DeviceIDText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.DeviceIDText.Size = new System.Drawing.Size(58, 20);
-      this.DeviceIDText.TabIndex = 66;
-      this.DeviceIDText.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-      this.DeviceIDText.Visible = false;
-      // 
-      // label10
-      // 
-      this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(190, 301);
-      this.label10.Name = "label10";
-      this.label10.Size = new System.Drawing.Size(55, 13);
-      this.label10.TabIndex = 65;
-      this.label10.Text = "Device ID";
-      this.label10.Visible = false;
-      // 
       // GetObjectsBtn
       // 
       this.GetObjectsBtn.Location = new System.Drawing.Point(189, 72);
@@ -205,19 +117,9 @@
       this.label1.AutoSize = true;
       this.label1.Location = new System.Drawing.Point(380, 35);
       this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(76, 13);
+      this.label1.Size = new System.Drawing.Size(43, 13);
       this.label1.TabIndex = 72;
-      this.label1.Text = "Obejcts Found";
-      // 
-      // ObjectListLabel
-      // 
-      this.ObjectListLabel.AutoSize = true;
-      this.ObjectListLabel.Location = new System.Drawing.Point(186, 98);
-      this.ObjectListLabel.Name = "ObjectListLabel";
-      this.ObjectListLabel.Size = new System.Drawing.Size(57, 13);
-      this.ObjectListLabel.TabIndex = 73;
-      this.ObjectListLabel.Text = "Test Read";
-      this.ObjectListLabel.Visible = false;
+      this.label1.Text = "Objects";
       // 
       // ObjectLabel
       // 
@@ -273,16 +175,6 @@
       this.DeviceLabel.TabIndex = 79;
       this.DeviceLabel.Text = "Device ID";
       // 
-      // button1
-      // 
-      this.button1.Location = new System.Drawing.Point(190, 177);
-      this.button1.Name = "button1";
-      this.button1.Size = new System.Drawing.Size(75, 23);
-      this.button1.TabIndex = 80;
-      this.button1.Text = "button1";
-      this.button1.UseVisualStyleBackColor = true;
-      this.button1.Visible = false;
-      // 
       // GetDevicesBtn
       // 
       this.GetDevicesBtn.Location = new System.Drawing.Point(189, 3);
@@ -293,34 +185,34 @@
       this.GetDevicesBtn.UseVisualStyleBackColor = true;
       this.GetDevicesBtn.Click += new System.EventHandler(this.GetDevicesBtn_Click);
       // 
+      // ObjectListLabel
+      // 
+      this.ObjectListLabel.AutoSize = true;
+      this.ObjectListLabel.Location = new System.Drawing.Point(186, 107);
+      this.ObjectListLabel.Name = "ObjectListLabel";
+      this.ObjectListLabel.Size = new System.Drawing.Size(76, 13);
+      this.ObjectListLabel.TabIndex = 83;
+      this.ObjectListLabel.Text = "ObjectlistLabel";
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(708, 391);
+      this.Controls.Add(this.ObjectListLabel);
       this.Controls.Add(this.GetDevicesBtn);
-      this.Controls.Add(this.button1);
       this.Controls.Add(this.DeviceLabel);
       this.Controls.Add(this.ServerText);
       this.Controls.Add(this.label2);
       this.Controls.Add(this.ReadPresentValueBtn);
       this.Controls.Add(this.PresentValueLabel);
       this.Controls.Add(this.ObjectLabel);
-      this.Controls.Add(this.ObjectListLabel);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.ObjectList);
       this.Controls.Add(this.GetObjectsBtn);
-      this.Controls.Add(this.PCIDAddressText);
-      this.Controls.Add(this.label26);
-      this.Controls.Add(this.SerialNumberText);
-      this.Controls.Add(this.SerialNumberCaption);
-      this.Controls.Add(this.DeviceIDText);
-      this.Controls.Add(this.label10);
       this.Controls.Add(this.TestWriteLabel);
       this.Controls.Add(this.TestBinaryOffBtn);
       this.Controls.Add(this.TestBinaryOnBtn);
-      this.Controls.Add(this.TestReadLabel);
-      this.Controls.Add(this.TestReadPropBtn);
       this.Controls.Add(this.BroadcastLabel);
       this.Controls.Add(this.DeviceList);
       this.Name = "MainForm";
@@ -333,31 +225,22 @@
 
     #endregion
 
-    private System.Windows.Forms.Label TestReadLabel;
-    private System.Windows.Forms.Button TestReadPropBtn;
     private System.Windows.Forms.Label BroadcastLabel;
     private System.Windows.Forms.ListBox DeviceList;
     private System.Windows.Forms.Label TestWriteLabel;
     private System.Windows.Forms.Button TestBinaryOffBtn;
     private System.Windows.Forms.Button TestBinaryOnBtn;
-    private System.Windows.Forms.TextBox PCIDAddressText;
-    private System.Windows.Forms.Label label26;
-    private System.Windows.Forms.TextBox SerialNumberText;
-    private System.Windows.Forms.Label SerialNumberCaption;
-    private System.Windows.Forms.TextBox DeviceIDText;
-    private System.Windows.Forms.Label label10;
     private System.Windows.Forms.Button GetObjectsBtn;
     private System.Windows.Forms.ListBox ObjectList;
     private System.Windows.Forms.Label label1;
-    private System.Windows.Forms.Label ObjectListLabel;
     private System.Windows.Forms.Label ObjectLabel;
     private System.Windows.Forms.Label PresentValueLabel;
     private System.Windows.Forms.Button ReadPresentValueBtn;
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.TextBox ServerText;
     private System.Windows.Forms.Label DeviceLabel;
-    private System.Windows.Forms.Button button1;
     private System.Windows.Forms.Button GetDevicesBtn;
+    private System.Windows.Forms.Label ObjectListLabel;
   }
 }
 
