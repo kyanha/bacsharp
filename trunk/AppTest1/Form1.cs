@@ -59,7 +59,7 @@ namespace BACnetTest
       InitializeComponent();
       Self = this;  // Works only if there is only one mainform
 
-      string appini = Application.StartupPath + @"\BACnetTest.INI";
+      string appini = Application.StartupPath + @"\AppTest1.INI";
       if (File.Exists(appini))
       {
         IniFile ini = new IniFile(appini);
@@ -74,6 +74,7 @@ namespace BACnetTest
       ReadPresentValueBtn.Enabled = false;
       TestBinaryOnBtn.Enabled = false;
       TestBinaryOffBtn.Enabled = false;
+      ObjectListLabel.Text = "";
     }
 
     public void SetBroadcastLabel(string s)
@@ -89,7 +90,7 @@ namespace BACnetTest
         if (ServerText.Text != server)
         {
           server = ServerText.Text;
-          string appini = Application.StartupPath + @"\BACnetTest.INI";
+          string appini = Application.StartupPath + @"\AppTest1.INI";
           IniFile ini = new IniFile(appini);
           ini.IniWriteValue("Network", "Server", server);
         }
@@ -115,34 +116,13 @@ namespace BACnetTest
       }
     }
 
-    private void TestReadPropBtn_Click(object sender, EventArgs e)
-    {
-      TestReadLabel.Text = "...";
-
-      Property prop = new Property();
-      prop.Tag = BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_CHARACTER_STRING;
-      if (stack.SendReadProperty(
-        BACnetData.DeviceIndex,
-        BACnetData.Devices[BACnetData.DeviceIndex].Instance,
-        -1,
-        BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_DEVICE,
-        BACnetEnums.BACNET_PROPERTY_ID.PROP_SERIAL_NUMBER,
-        //BACnetEnums.BACNET_PROPERTY_ID.PROP_APPLICATION_SOFTWARE_VERSION,
-        //BACnetEnums.BACNET_PROPERTY_ID.PROP_MAX_MASTER,
-        //BACnetEnums.BACNET_PROPERTY_ID.PROP_BAUD_RATE,
-        prop))
-        TestReadLabel.Text = prop.ValueString;
-      else
-        TestReadLabel.Text = "Read Property Error";
-    }
-
     private void DeviceList_SelectedIndexChanged(object sender, EventArgs e)
     {
       int idx = DeviceList.SelectedIndex;
       if ((idx >= 0) && (idx < BACnetData.Devices.Count()))
       {
-        DeviceIDText.Text = BACnetData.Devices[idx].Instance.ToString();
-        DeviceLabel.Text = BACnetData.Devices[idx].Instance.ToString();
+        //DeviceIDText.Text = BACnetData.Devices[idx].Instance.ToString();
+        //DeviceLabel.Text = BACnetData.Devices[idx].Instance.ToString();
         BACnetData.DeviceIndex = idx;
       }
     }
@@ -150,6 +130,7 @@ namespace BACnetTest
     private void GetObjectsBtn_Click(object sender, EventArgs e)
     {
       // Read the Device Array
+      ObjectListLabel.Text = "";
       Property prop = new Property();
       prop.Tag = BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_ENUMERATED;
       if (!stack.SendReadProperty(

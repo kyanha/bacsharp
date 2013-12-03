@@ -792,8 +792,6 @@ namespace BACnet
       // Send the request
       //MessageBox.Show("Send Who-Is (" + broadcast + ")");
       //MessageBox.Show("Send Who-Is");
-      //BACnetTest.MainForm.Self.SetBroadcastLabel ("Devices (" + broadcast.ToString() + ")");
-      BACnetTest.MainForm.Self.SetBroadcastLabel("Devices (" + ipaddr.ToString() + ")");
 
       // Create the timer
       Timer IAmTimer = new Timer();
@@ -867,7 +865,6 @@ namespace BACnet
           IAmTimer.Stop();
         }
       }
-      //WindowsFormsApplication1.MainForm.Self.SetStatus("");
     }
 
     // Read Read Property -------------------------------------------------------------------------
