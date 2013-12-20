@@ -206,14 +206,14 @@ namespace BACnet
         }
         if (SLEN == 2)
         {
-          temp = new byte[2];
+          SADR = new byte[2];
           SADR[1] = bytes[len++];
           SADR[0] = bytes[len++];
           SAddress = (UInt32)BitConverter.ToUInt16(SADR, 0);
         }
         if (SLEN == 4)
         {
-          temp = new byte[4];
+          SADR = new byte[4];
           SADR[3] = bytes[len++];
           SADR[2] = bytes[len++];
           SADR[1] = bytes[len++];
