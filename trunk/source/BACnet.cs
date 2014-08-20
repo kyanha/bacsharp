@@ -176,7 +176,7 @@ namespace BACnet
           temp = new byte[2];
           DADR[1] = bytes[len++];
           DADR[0] = bytes[len++];
-          DAddress = (UInt32)BitConverter.ToUInt16(DADR,0);
+          DAddress = (UInt32)BitConverter.ToUInt16(DADR, 0);
         }
         if (DLEN == 4)
         {
@@ -190,6 +190,9 @@ namespace BACnet
         //PEP Other DLEN values ...
 
       }
+      else
+        DLEN = 0;
+
       if ((PDUControl & 0x08) > 0)
       {
         // We have a Source
@@ -222,6 +225,9 @@ namespace BACnet
         }
         //PEP Other SLEN values ...
       }
+      else
+        SLEN = 0;
+
       if ((PDUControl & 0x20) > 0)
       {
         HopCount = bytes[len++];  // Get the Hop Count 
@@ -256,6 +262,7 @@ namespace BACnet
     public string Name { get; set; }
     public int VendorID { get; set; }
     public int Network { get; set; }
+    public byte SourceLength { get; set; }
     public UInt32 Instance { get; set; }
     public UInt32 MACAddress { get; set; }
     //public NPDU NetPDU;
@@ -266,10 +273,11 @@ namespace BACnet
       //NetPDU = new NPDU();
     }
 
-    public Device(string name, int vendorid, int network, UInt32 instance)
+    public Device(string name, int vendorid, byte slen, int network, UInt32 instance)
     {
       this.Name = name;
       this.VendorID = vendorid;
+      this.SourceLength = slen;
       this.Network = network;
       this.Instance = instance;
       //NetPDU = new NPDU();
@@ -842,6 +850,7 @@ namespace BACnet
                 {
                   Device device = new Device();
                   device.Name = "Device";
+                  device.SourceLength = NPDU.SLEN;
                   device.Network = NPDU.SNET;
                   device.MACAddress = NPDU.SAddress;
                   device.Instance = APDU.ObjectID;
@@ -911,40 +920,47 @@ namespace BACnet
 
       // NPDU
       sendBytes[4] = BACnetEnums.BACNET_PROTOCOL_VERSION;
-      sendBytes[5] = 0x24;  // Control flags
+      if (BACnetData.Devices[devidx].SourceLength == 0)
+        sendBytes[5] = 0x04;  // Control flags, no destination address
+      else
+        sendBytes[5] = 0x24;  // Control flags, with broadcast or destination address
 
-      // Get the (MSTP) Network number (2001)
-      //sendBytes[6] = 0x07;  // Destination network address (2001)
-      //sendBytes[7] = 0xD1;
-      byte[] temp2 = new byte[2];
-      temp2 = BitConverter.GetBytes(BACnetData.Devices[devidx].Network);
-      sendBytes[6] = temp2[1];
-      sendBytes[7] = temp2[0];
+      len = 6;
+      if (BACnetData.Devices[devidx].SourceLength > 0)
+      {
+        // Get the (MSTP) Network number (2001)
+        //sendBytes[6] = 0x07;  // Destination network address (2001)
+        //sendBytes[7] = 0xD1;
+        byte[] temp2 = new byte[2];
+        temp2 = BitConverter.GetBytes(BACnetData.Devices[devidx].Network);
+        sendBytes[len++] = temp2[1];
+        sendBytes[len++] = temp2[0];
 
-      // Get the MAC address (0x0D)
-      //sendBytes[8] = 0x01;  // MAC address length
-      //sendBytes[9] = 0x0D;  // Destination MAC layer address
-      byte[] temp4 = new byte[4];
-      temp4 = BitConverter.GetBytes(BACnetData.Devices[devidx].MACAddress);
-      sendBytes[8] = 0x01;  // MAC address length - adjust for other lengths ...
-      sendBytes[9] = temp4[0];
+        // Get the MAC address (0x0D)
+        //sendBytes[8] = 0x01;  // MAC address length
+        //sendBytes[9] = 0x0D;  // Destination MAC layer address
+        byte[] temp4 = new byte[4];
+        temp4 = BitConverter.GetBytes(BACnetData.Devices[devidx].MACAddress);
 
-      sendBytes[10] = 0xFF;  // Hop count = 255
+        sendBytes[len++] = 0x01;  // MAC address length - adjust for other lengths ...
+        sendBytes[len++] = temp4[0];
+        sendBytes[len++] = 0xFF;  // Hop count = 255
+      }
 
       // APDU
-      sendBytes[11] = 0x00;  // Control flags
-      sendBytes[12] = 0x05;  // Max APDU length (1476)
+      sendBytes[len++] = 0x00;  // Control flags
+      sendBytes[len++] = 0x05;  // Max APDU length (1476)
 
       // Create invoke counter
-      sendBytes[13] = InvokeCounter++;  // Invoke ID
+      sendBytes[len++] = InvokeCounter++;  // Invoke ID
 
-      sendBytes[14] = 0x0C;  // Service Choice: Read Property request
+      sendBytes[len++] = 0x0C;  // Service Choice: Read Property request
 
       // Service Request (var part of APDU):
       // Set up Object ID (Context Tag)
       //len = APDU.SetObjectID(ref sendBytes, 15, BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_BINARY_INPUT, 0);
       //len = APDU.SetObjectID(ref sendBytes, 15, objtype, objid);
-      len = APDU.SetObjectID(ref sendBytes, 15, objtype, objinst);
+      len = APDU.SetObjectID(ref sendBytes, len, objtype, objinst);
 
       // Set up Property ID (Context Tag)
       //len = APDU.SetPropertyID(ref sendBytes, len, BACnetEnums.BACNET_PROPERTY_ID.PROP_OBJECT_NAME);
@@ -1060,40 +1076,47 @@ namespace BACnet
 
       // NPDU
       sendBytes[4] = BACnetEnums.BACNET_PROTOCOL_VERSION;
-      sendBytes[5] = 0x24;  // Control flags
+      if (BACnetData.Devices[devidx].SourceLength == 0)
+        sendBytes[5] = 0x04;  // Control flags, no destination address
+      else
+        sendBytes[5] = 0x24;  // Control flags, with broadcast or destination
 
-      // Get the (MSTP) Network number (2001)
-      //sendBytes[6] = 0x07;  // Destination network address (2001)
-      //sendBytes[7] = 0xD1;
-      byte[] temp2 = new byte[2];
-      temp2 = BitConverter.GetBytes(BACnetData.Devices[devidx].Network);
-      sendBytes[6] = temp2[1];
-      sendBytes[7] = temp2[0];
+      len = 6;
+      if (BACnetData.Devices[devidx].SourceLength > 0)
+      {
+        // Get the (MSTP) Network number (2001)
+        //sendBytes[6] = 0x07;  // Destination network address (2001)
+        //sendBytes[7] = 0xD1;
+        byte[] temp2 = new byte[2];
+        temp2 = BitConverter.GetBytes(BACnetData.Devices[devidx].Network);
+        sendBytes[len++] = temp2[1];
+        sendBytes[len++] = temp2[0];
 
-      // Get the MAC address (0x0D)
-      //sendBytes[8] = 0x01;  // MAC address length
-      //sendBytes[9] = 0x0D;  // Destination MAC layer address
-      byte[] temp4 = new byte[4];
-      temp4 = BitConverter.GetBytes(BACnetData.Devices[devidx].MACAddress);
-      sendBytes[8] = 0x01;  // MAC address length - adjust for other lengths ...
-      sendBytes[9] = temp4[0];
+        // Get the MAC address (0x0D)
+        //sendBytes[8] = 0x01;  // MAC address length
+        //sendBytes[9] = 0x0D;  // Destination MAC layer address
+        byte[] temp4 = new byte[4];
+        temp4 = BitConverter.GetBytes(BACnetData.Devices[devidx].MACAddress);
+        sendBytes[len++] = 0x01;  // MAC address length - adjust for other lengths ...
+        sendBytes[len++] = temp4[0];
 
-      sendBytes[10] = 0xFF;  // Hop count = 255
+        sendBytes[len++] = 0xFF;  // Hop count = 255
+      }
 
       // APDU
-      sendBytes[11] = 0x00;  // Control flags
-      sendBytes[12] = 0x05;  // Max APDU length (1476)
+      sendBytes[len++] = 0x00;  // Control flags
+      sendBytes[len++] = 0x05;  // Max APDU length (1476)
 
       // Create invoke counter
-      sendBytes[13] = InvokeCounter++;  // Invoke ID
+      sendBytes[len++] = InvokeCounter++;  // Invoke ID
 
-      sendBytes[14] = 0x0F;  // Service Choice: Write Property request
+      sendBytes[len++] = 0x0F;  // Service Choice: Write Property request
 
       // Service Request (var part of APDU):
       // Set up Object ID (Context Tag)
       //len = APDU.SetObjectID(ref sendBytes, 15, BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_BINARY_INPUT, 0);
       //len = APDU.SetObjectID(ref sendBytes, 15, objtype, objid);
-      len = APDU.SetObjectID(ref sendBytes, 15, objtype, objinst);
+      len = APDU.SetObjectID(ref sendBytes, len, objtype, objinst);
 
       // Set up Property ID (Context Tag)
       //len = APDU.SetPropertyID(ref sendBytes, len, BACnetEnums.BACNET_PROPERTY_ID.PROP_OBJECT_NAME);
