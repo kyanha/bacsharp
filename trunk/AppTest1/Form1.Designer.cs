@@ -39,11 +39,15 @@
       this.ObjectLabel = new System.Windows.Forms.Label();
       this.PresentValueLabel = new System.Windows.Forms.Label();
       this.ReadPresentValueBtn = new System.Windows.Forms.Button();
-      this.label2 = new System.Windows.Forms.Label();
-      this.ServerText = new System.Windows.Forms.TextBox();
       this.DeviceLabel = new System.Windows.Forms.Label();
       this.GetDevicesBtn = new System.Windows.Forms.Button();
       this.ObjectListLabel = new System.Windows.Forms.Label();
+      this.label3 = new System.Windows.Forms.Label();
+      this.NetworkLabel = new System.Windows.Forms.Label();
+      this.label4 = new System.Windows.Forms.Label();
+      this.AddressLabel = new System.Windows.Forms.Label();
+      this.EndPointLabel = new System.Windows.Forms.Label();
+      this.label6 = new System.Windows.Forms.Label();
       this.SuspendLayout();
       // 
       // BroadcastLabel
@@ -95,7 +99,7 @@
       // 
       // GetObjectsBtn
       // 
-      this.GetObjectsBtn.Location = new System.Drawing.Point(189, 72);
+      this.GetObjectsBtn.Location = new System.Drawing.Point(383, 9);
       this.GetObjectsBtn.Name = "GetObjectsBtn";
       this.GetObjectsBtn.Size = new System.Drawing.Size(102, 23);
       this.GetObjectsBtn.TabIndex = 70;
@@ -149,23 +153,6 @@
       this.ReadPresentValueBtn.UseVisualStyleBackColor = true;
       this.ReadPresentValueBtn.Click += new System.EventHandler(this.ReadPresentValueBtn_Click);
       // 
-      // label2
-      // 
-      this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(9, 5);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(38, 13);
-      this.label2.TabIndex = 77;
-      this.label2.Text = "Server";
-      // 
-      // ServerText
-      // 
-      this.ServerText.Location = new System.Drawing.Point(59, 5);
-      this.ServerText.Name = "ServerText";
-      this.ServerText.RightToLeft = System.Windows.Forms.RightToLeft.No;
-      this.ServerText.Size = new System.Drawing.Size(108, 20);
-      this.ServerText.TabIndex = 78;
-      // 
       // DeviceLabel
       // 
       this.DeviceLabel.AutoSize = true;
@@ -177,7 +164,7 @@
       // 
       // GetDevicesBtn
       // 
-      this.GetDevicesBtn.Location = new System.Drawing.Point(189, 3);
+      this.GetDevicesBtn.Location = new System.Drawing.Point(12, 9);
       this.GetDevicesBtn.Name = "GetDevicesBtn";
       this.GetDevicesBtn.Size = new System.Drawing.Size(102, 23);
       this.GetDevicesBtn.TabIndex = 81;
@@ -194,16 +181,74 @@
       this.ObjectListLabel.TabIndex = 83;
       this.ObjectListLabel.Text = "ObjectlistLabel";
       // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Location = new System.Drawing.Point(186, 153);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(47, 13);
+      this.label3.TabIndex = 84;
+      this.label3.Text = "Network";
+      // 
+      // NetworkLabel
+      // 
+      this.NetworkLabel.AutoSize = true;
+      this.NetworkLabel.Location = new System.Drawing.Point(244, 153);
+      this.NetworkLabel.Name = "NetworkLabel";
+      this.NetworkLabel.Size = new System.Drawing.Size(47, 13);
+      this.NetworkLabel.TabIndex = 85;
+      this.NetworkLabel.Text = "Network";
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Location = new System.Drawing.Point(186, 173);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(45, 13);
+      this.label4.TabIndex = 86;
+      this.label4.Text = "Address";
+      // 
+      // AddressLabel
+      // 
+      this.AddressLabel.AutoSize = true;
+      this.AddressLabel.Location = new System.Drawing.Point(244, 173);
+      this.AddressLabel.Name = "AddressLabel";
+      this.AddressLabel.Size = new System.Drawing.Size(45, 13);
+      this.AddressLabel.TabIndex = 87;
+      this.AddressLabel.Text = "Address";
+      // 
+      // EndPointLabel
+      // 
+      this.EndPointLabel.AutoSize = true;
+      this.EndPointLabel.Location = new System.Drawing.Point(244, 133);
+      this.EndPointLabel.Name = "EndPointLabel";
+      this.EndPointLabel.Size = new System.Drawing.Size(53, 13);
+      this.EndPointLabel.TabIndex = 89;
+      this.EndPointLabel.Text = "End Point";
+      // 
+      // label6
+      // 
+      this.label6.AutoSize = true;
+      this.label6.Location = new System.Drawing.Point(186, 133);
+      this.label6.Name = "label6";
+      this.label6.Size = new System.Drawing.Size(53, 13);
+      this.label6.TabIndex = 88;
+      this.label6.Text = "End Point";
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(708, 391);
+      this.Controls.Add(this.EndPointLabel);
+      this.Controls.Add(this.label6);
+      this.Controls.Add(this.AddressLabel);
+      this.Controls.Add(this.label4);
+      this.Controls.Add(this.NetworkLabel);
+      this.Controls.Add(this.label3);
       this.Controls.Add(this.ObjectListLabel);
       this.Controls.Add(this.GetDevicesBtn);
       this.Controls.Add(this.DeviceLabel);
-      this.Controls.Add(this.ServerText);
-      this.Controls.Add(this.label2);
       this.Controls.Add(this.ReadPresentValueBtn);
       this.Controls.Add(this.PresentValueLabel);
       this.Controls.Add(this.ObjectLabel);
@@ -217,7 +262,6 @@
       this.Controls.Add(this.DeviceList);
       this.Name = "MainForm";
       this.Text = "BACnet Test";
-      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -236,11 +280,15 @@
     private System.Windows.Forms.Label ObjectLabel;
     private System.Windows.Forms.Label PresentValueLabel;
     private System.Windows.Forms.Button ReadPresentValueBtn;
-    private System.Windows.Forms.Label label2;
-    private System.Windows.Forms.TextBox ServerText;
     private System.Windows.Forms.Label DeviceLabel;
     private System.Windows.Forms.Button GetDevicesBtn;
     private System.Windows.Forms.Label ObjectListLabel;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Label NetworkLabel;
+    private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Label AddressLabel;
+    private System.Windows.Forms.Label EndPointLabel;
+    private System.Windows.Forms.Label label6;
   }
 }
 

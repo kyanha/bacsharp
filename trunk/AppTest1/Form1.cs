@@ -1,6 +1,6 @@
 ﻿/* COPYRIGHT
  -------------------------------------------
- Copyright (C) 2013 Plus 1 Micro, Inc.
+ Copyright (C) 2013-2015 Plus 1 Micro, Inc.
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -51,30 +51,42 @@ namespace BACnetTest
 
     public static MainForm Self;
 
-    BACnetStack stack;
-    string server;
+    public BACnetStack BACStack = null;
     
     public MainForm()
     {
       InitializeComponent();
       Self = this;  // Works only if there is only one mainform
 
-      string appini = Application.StartupPath + @"\AppTest1.INI";
-      if (File.Exists(appini))
-      {
-        IniFile ini = new IniFile(appini);
-        server = ini.IniReadValue("Network", "Server");
-      }
-
-      //if (server == "") server = "198.168.92.68";
-
-      ServerText.Text = server;
-
       GetObjectsBtn.Enabled = false;
       ReadPresentValueBtn.Enabled = false;
       TestBinaryOnBtn.Enabled = false;
       TestBinaryOffBtn.Enabled = false;
       ObjectListLabel.Text = "";
+
+      // Create the BACNet stack
+      BACStack = new BACnetStack();
+
+    }
+
+    public void CreateDeviceList()
+    {
+      BACStack.GetDevices(1000);
+      DeviceList.Items.Clear();
+      if (BACnetData.Devices.Count == 0)
+      {
+        MessageBox.Show("No Devices found");
+      }
+      else
+      {
+        foreach (Device dev in BACnetData.Devices)
+        {
+          DeviceList.Items.Add(
+            //dev.VendorID.ToString() + ", " + 
+            dev.Network.ToString() + ", " +
+            dev.Instance.ToString());
+        }
+      }
     }
 
     public void SetBroadcastLabel(string s)
@@ -84,36 +96,7 @@ namespace BACnetTest
 
     private void GetDevicesBtn_Click(object sender, EventArgs e)
     {
-      // Create the BACnet Stack, and populate the Devices List
-      try
-      {
-        if (ServerText.Text != server)
-        {
-          server = ServerText.Text;
-          string appini = Application.StartupPath + @"\AppTest1.INI";
-          IniFile ini = new IniFile(appini);
-          ini.IniWriteValue("Network", "Server", server);
-        }
-
-        stack = new BACnetStack(server);
-        stack.GetDevices(500);
-
-        DeviceList.Items.Clear();
-        foreach (Device dev in BACnetData.Devices)
-        {
-          DeviceList.Items.Add(
-            //dev.VendorID.ToString() + ", " + 
-            dev.Network.ToString() + ", " +
-            dev.Instance.ToString());
-        }
-        ServerText.Enabled = false;
-        GetDevicesBtn.Enabled = false;
-        GetObjectsBtn.Enabled = true;
-      }
-      catch
-      {
-        MessageBox.Show("Could not initialize");
-      }
+      CreateDeviceList();
     }
 
     private void DeviceList_SelectedIndexChanged(object sender, EventArgs e)
@@ -121,62 +104,67 @@ namespace BACnetTest
       int idx = DeviceList.SelectedIndex;
       if ((idx >= 0) && (idx < BACnetData.Devices.Count()))
       {
-        //DeviceIDText.Text = BACnetData.Devices[idx].Instance.ToString();
-        //DeviceLabel.Text = BACnetData.Devices[idx].Instance.ToString();
         BACnetData.DeviceIndex = idx;
+        Device device = BACnetData.Devices[idx];
+        EndPointLabel.Text = device.ServerEP.ToString();
+        NetworkLabel.Text = device.Network.ToString();
+        AddressLabel.Text = device.MACAddress.ToString();
+        GetObjectsBtn.Enabled = true;
       }
+      else
+        GetObjectsBtn.Enabled = false;
     }
 
     private void GetObjectsBtn_Click(object sender, EventArgs e)
     {
       // Read the Device Array
       ObjectListLabel.Text = "";
-      Property prop = new Property();
-      prop.Tag = BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_ENUMERATED;
-      if (!stack.SendReadProperty(
+      Property property = new Property();
+      property.Tag = BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_ENUMERATED;
+      if (!BACStack.SendReadProperty(
         BACnetData.DeviceIndex,
         BACnetData.Devices[BACnetData.DeviceIndex].Instance,
         0, // Array[0] is Object Count
         BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_DEVICE,
         BACnetEnums.BACNET_PROPERTY_ID.PROP_OBJECT_LIST,
-        prop))
+        property))
       {
         ObjectListLabel.Text = "Read Property Object List Error (1)";
         return;
       }
 
-      if (prop.Tag != BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_UNSIGNED_INT)
+      if (property.Tag != BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_UNSIGNED_INT)
       {
         ObjectListLabel.Text = "Read Property Object List Error (2)";
         return;
       }
 
-      ObjectListLabel.Text = prop.ValueUInt.ToString() + " objects found";
+      ObjectListLabel.Text = property.ValueUInt.ToString() + " objects found";
 
       int i, tries;
-      uint total = prop.ValueUInt;
+      uint total = property.ValueUInt;
       ObjectList.Items.Clear();
       if (total > 0) for (i = 1; i <= total; i++)
       {
         // Read through Array[x] up to Object Count
-        //PEP Need to try the read again if it times out
+        // Need to try the read again if it times out
         tries = 0;
         while (tries < 5)
         {
           tries++;
-          if (stack.SendReadProperty(
+          if (BACStack.SendReadProperty(
             BACnetData.DeviceIndex,
             BACnetData.Devices[BACnetData.DeviceIndex].Instance,
             i, // each array index
             BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_DEVICE,
             BACnetEnums.BACNET_PROPERTY_ID.PROP_OBJECT_LIST,
-            prop))
+            property))
           {
             tries = 5; // Next object
             string s;
-            if (prop.Tag != BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_OBJECT_ID)
+            if (property.Tag != BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_OBJECT_ID)
               tries = 5; // continue;
-            switch (prop.ValueObjectType)
+            switch (property.ValueObjectType)
             {
               case BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_DEVICE: s = "Device"; break;
               case BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_ANALOG_INPUT: s = "Analog Input"; break;
@@ -187,7 +175,7 @@ namespace BACnetTest
               case BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_BINARY_VALUE: s = "Binary value"; break;
               default: s = "Other"; break;
             }
-            s = s + "  " + prop.ValueObjectInstance.ToString();
+            s = s + "  " + property.ValueObjectInstance.ToString();
             ObjectList.Items.Add(s);
           }
         }
@@ -216,6 +204,10 @@ namespace BACnetTest
     private void ReadPresentValueBtn_Click(object sender, EventArgs e)
     {
       PresentValueLabel.Text = "...";
+
+      // Assume just Binary Output for now ...
+      BACnetEnums.BACNET_OBJECT_TYPE objtype = BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_BINARY_OUTPUT;
+      BACnetEnums.BACNET_PROPERTY_ID propid = BACnetEnums.BACNET_PROPERTY_ID.PROP_PRESENT_VALUE;
       int idx = ObjectList.SelectedIndex;
       if (idx >= 0)
       {
@@ -223,25 +215,25 @@ namespace BACnetTest
         string s1 = s.Substring(15);
         if (s1.Length > 0)
         {
-          uint inst = Convert.ToUInt32(s1);
-          Property prop = new Property();
-          if (!stack.SendReadProperty(
-            BACnetData.DeviceIndex,
-            inst,
-            -1,
-            BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_BINARY_OUTPUT,
-            BACnetEnums.BACNET_PROPERTY_ID.PROP_PRESENT_VALUE,
-            prop))
+          uint objinst = Convert.ToUInt32(s1);
+          Property property = new Property();
+         
+          if (!BACStack.SendReadProperty(BACnetData.DeviceIndex, 
+            (uint)objinst, 
+            -1, 
+            objtype, 
+            propid, 
+            property))
           {
             PresentValueLabel.Text = "Read Present Value Error (1)";
             return;
           }
-          if (prop.Tag != BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_ENUMERATED)
+          if (property.Tag != BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_ENUMERATED)
           {
             PresentValueLabel.Text = "Read Present Value Error (2)";
             return;
           }
-          if (prop.ValueEnum == 1)
+          if (property.ValueEnum == 1)
             PresentValueLabel.Text = "Binary Output On";
           else
             PresentValueLabel.Text = "Binary Output Off";
@@ -249,11 +241,13 @@ namespace BACnetTest
       }
     }
 
-    private void TestBinaryOnBtn_Click(object sender, EventArgs e)
+    private void SendBinaryOutput(bool OnState)
     {
-      // Test Binary On
       TestWriteLabel.Text = "...";
 
+      // Assume just Binary Output for now ...
+      BACnetEnums.BACNET_OBJECT_TYPE objtype = BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_BINARY_OUTPUT;
+      BACnetEnums.BACNET_PROPERTY_ID propid = BACnetEnums.BACNET_PROPERTY_ID.PROP_PRESENT_VALUE;
       int idx = ObjectList.SelectedIndex;
       if (idx >= 0)
       {
@@ -261,57 +255,39 @@ namespace BACnetTest
         string s1 = s.Substring(15);
         if (s1.Length > 0)
         {
-          uint inst = Convert.ToUInt32(s1);
-          Property prop = new Property();
-          prop.Tag = BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_ENUMERATED;
-          prop.ValueEnum = 1; // Turn it on
-          if (stack.SendWriteProperty(
+          uint objinst = Convert.ToUInt32(s1);
+          Property property = new Property();
+          property.Tag = BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_ENUMERATED;
+          if (OnState)
+            property.ValueEnum = 1; // Turn it on
+          else
+            property.ValueEnum = 0; // Turn it off
+          if (BACStack.SendWriteProperty(
             BACnetData.DeviceIndex,
-            inst,
+            (uint)objinst,
             -1,
-            BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_BINARY_OUTPUT,
-            BACnetEnums.BACNET_PROPERTY_ID.PROP_PRESENT_VALUE,
-            prop, 1))
-            TestWriteLabel.Text = "Binary Output On";
+            objtype,
+            propid,
+            property,
+            1))
+            TestWriteLabel.Text = "Binary Output " + (OnState ? "On" : "Off");
           else
             TestWriteLabel.Text = "Binary Output On Error";
         }
       }
     }
 
+    private void TestBinaryOnBtn_Click(object sender, EventArgs e)
+    {
+      // Test Binary On
+      SendBinaryOutput(true);
+    }
+
     private void TestBinaryOffBtn_Click(object sender, EventArgs e)
     {
       // Test Binary Off
       TestWriteLabel.Text = "...";
-
-      int idx = ObjectList.SelectedIndex;
-      if (idx >= 0)
-      {
-        string s = ObjectList.Items[idx].ToString();
-        string s1 = s.Substring(15);
-        if (s1.Length > 0)
-        {
-          uint inst = Convert.ToUInt32(s1);
-          Property prop = new Property();
-          prop.Tag = BACnetEnums.BACNET_APPLICATION_TAG.BACNET_APPLICATION_TAG_ENUMERATED;
-          prop.ValueEnum = 0; // Turn if off
-          if (stack.SendWriteProperty(
-            BACnetData.DeviceIndex,
-            inst,
-            -1,
-            BACnetEnums.BACNET_OBJECT_TYPE.OBJECT_BINARY_OUTPUT,
-            BACnetEnums.BACNET_PROPERTY_ID.PROP_PRESENT_VALUE,
-            prop, 1))
-            TestWriteLabel.Text = "Binary Output Off";
-          else
-            TestWriteLabel.Text = "Binary Output Off Error";
-        }
-      }
-    }
-
-    private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-    {
-      if (stack != null) stack.Close();
+      SendBinaryOutput(false);
     }
 
   }
