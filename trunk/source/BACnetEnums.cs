@@ -1,11 +1,11 @@
 ﻿/**************************************************************************
 *
-* THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
-* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
-* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
-* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+* THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *
 *********************************************************************/
@@ -772,12 +772,37 @@ namespace BACnet
       OBJECT_TREND_LOG_MULTIPLE = 27,
       OBJECT_LOAD_CONTROL = 28,
       OBJECT_STRUCTURED_VIEW = 29,
-      /* what is object type 30? */
-      OBJECT_LIGHTING_OUTPUT = 31,
+      OBJECT_ACCESS_DOOR = 30,
+      OBJECT_TIMER = 31,
+      OBJECT_ACCESS_CREDENTIAL = 32,      /* Addendum 2008-j */
+      OBJECT_ACCESS_POINT = 33,
+      OBJECT_ACCESS_RIGHTS = 34,
+      OBJECT_ACCESS_USER = 35,
+      OBJECT_ACCESS_ZONE = 36,
+      OBJECT_CREDENTIAL_DATA_INPUT = 37,  /* authentication-factor-input */
+      OBJECT_NETWORK_SECURITY = 38,       /* Addendum 2008-g */
+      OBJECT_BITSTRING_VALUE = 39,        /* Addendum 2008-w */
+      OBJECT_CHARACTERSTRING_VALUE = 40,  /* Addendum 2008-w */
+      OBJECT_DATE_PATTERN_VALUE = 41,     /* Addendum 2008-w */
+      OBJECT_DATE_VALUE = 42,     /* Addendum 2008-w */
+      OBJECT_DATETIME_PATTERN_VALUE = 43, /* Addendum 2008-w */
+      OBJECT_DATETIME_VALUE = 44, /* Addendum 2008-w */
+      OBJECT_INTEGER_VALUE = 45,  /* Addendum 2008-w */
+      OBJECT_LARGE_ANALOG_VALUE = 46,     /* Addendum 2008-w */
+      OBJECT_OCTETSTRING_VALUE = 47,      /* Addendum 2008-w */
+      OBJECT_POSITIVE_INTEGER_VALUE = 48, /* Addendum 2008-w */
+      OBJECT_TIME_PATTERN_VALUE = 49,     /* Addendum 2008-w */
+      OBJECT_TIME_VALUE = 50,     /* Addendum 2008-w */
+      OBJECT_NOTIFICATION_FORWARDER = 51, /* Addendum 2010-af */
+      OBJECT_ALERT_ENROLLMENT = 52,       /* Addendum 2010-af */
+      OBJECT_CHANNEL = 53,        /* Addendum 2010-aa */
+      OBJECT_LIGHTING_OUTPUT = 54,        /* Addendum 2010-i */
+      OBJECT_BINARY_LIGHTING_OUTPUT = 55, /* Addendum 135-2012az */
+      OBJECT_NETWORK_PORT = 56,   /* Addendum 135-2012az */
       /* Enumerated values 0-127 are reserved for definition by ASHRAE. */
       /* Enumerated values 128-1023 may be used by others subject to  */
       /* the procedures and constraints described in Clause 23. */
-      MAX_ASHRAE_OBJECT_TYPE = 32,        /* used for bit string loop */
+      MAX_ASHRAE_OBJECT_TYPE = 56,        /* used for bit string loop */
       MAX_BACNET_OBJECT_TYPE = 1023
     }
 
